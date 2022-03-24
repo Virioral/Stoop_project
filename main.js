@@ -6,7 +6,7 @@ var __data = {
     "subject": 0,
     "group": 0,
     "length": 0,
-    "trials":{
+    "blocks":{
     }
      
 
@@ -63,7 +63,10 @@ var seq = 0;
 
 var debug;
 
-var groupe = 1;
+var groupe = location.search.replace('?groupe=', '');
+
+//var mydata = JSON.parse(data);
+
 
 
 $('document').ready(function(){
@@ -80,17 +83,17 @@ $('document').ready(function(){
         startY = e.screenY;
         current_item = dico.shift();
         if(seq > 0){
-            if(__data["trials"][seq] == undefined){
+            if(__data["blocks"][seq] == undefined){
                 __data["subject"] = "01";
                 __data["group"] = groupe;
-                __data["trials"][seq] = {};
+                __data["blocks"][seq] = {};
                 __data["length"] = dico.length;
 
             }
-            __data["trials"][seq][__data["length"] - dico.length] = {};
+            __data["blocks"][seq][__data["length"] - dico.length] = {};
 
-            __data["trials"][seq][__data["length"] - dico.length]["word"] = current_item.name;
-            __data["trials"][seq][__data["length"] - dico.length]["color"] = current_item.color;
+            __data["blocks"][seq][__data["length"] - dico.length]["word"] = current_item.name;
+            __data["blocks"][seq][__data["length"] - dico.length]["color"] = current_item.color;
         }
         if(current_item == undefined){return;}
     
@@ -107,7 +110,7 @@ $('document').ready(function(){
         $('.slowmode').text(!saveMove ? "Veuillez effectuer l'action plus rapidement" : "").css('visibility', !saveMove ? 'unset' : 'hidden');
 
         $('html').css('cursor', 'auto');
-        await slowMove();
+        slowMove();
     
 
         mus = new Mus();
@@ -120,17 +123,15 @@ $('document').ready(function(){
         mus.stop();
         if(seq > 0){
             mus.frames[0]= ['s', startX, startY];
-            __data["trials"][seq][__data["length"] - dico.length]["coordinates"] = mus.getData();
-            save.push(mus.getData());
-
-            __data["trials"][seq][__data["length"] - dico.length]["answer"] = $(this).text();
+            __data["blocks"][seq][__data["length"] - dico.length]["coordinates"] = mus.getData().frames.filter(elem => elem.shift());
+            __data["blocks"][seq][__data["length"] - dico.length]["answer"] = $(this).text();
         }
 
 
         if($(this).text() != current_item.name){
             await showError();
             if(seq > 0){
-                __data["trials"][seq][__data["length"] - dico.length]["error"] = true;
+                __data["blocks"][seq][__data["length"] - dico.length]["error"] = true;
 
             }
         }
@@ -163,7 +164,7 @@ $('document').ready(function(){
     tab_pratice = tab_practice.sort(sortRandom);
     beforeStart();
 
-    displaysequence()
+    displaysequence(groupe);
 
 
 })
@@ -290,6 +291,22 @@ function slowMove(){
         resolve(saveMove);
     })
 }
+
+
+// function saveFirstMove(){
+
+//         $('html').on('mousemove', function(e){
+            
+//             $('html').off('mousemove');
+//         });
+//         await new Promise(function(resolve){
+//             setTimeout(resolve,500)
+//         });
+        
+        
+//         resolve(saveMove);
+//     })
+// }
 
 function tab(val){
     if(val == "pratice"){
