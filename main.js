@@ -2,7 +2,15 @@
 
 var saveMove = true;
 var save = [];
-var __data = {};
+var __data = {
+    "subject": 0,
+    "group": 0,
+    "length": 0,
+    "trials":{
+    }
+     
+
+};
 
 var data_congruent = [
     {
@@ -42,6 +50,7 @@ var data_incongruent = [
         color: 'blue'
     },
 ]
+
 var dico = [];
 var tab_practice = ["MC","MC","MC","MC","MC","MC","MC","MC","MI","MI","MI","MI","MI","MI","MI","MI"];
 
@@ -54,19 +63,15 @@ var seq = 0;
 
 var debug;
 
+var groupe = 1;
+
 
 $('document').ready(function(){
 
-    //let dico = [{name : 'ROUGE', color : 'rouge'}, {name : 'ROUGE', color : 'green'}, {name : 'BLEU', color : 'blue'}, {name : 'VERT', color : 'blue'}, {name : 'JAUNE', color : 'yellow'}, {name : 'VERT', color : 'green'},{name : 'JAUNE', color : 'blue'},{name : 'BLEU', color : 'red'},{name : 'BLEU', color : 'blue'},{name : 'VERT', color : 'vert'},{name : 'ROUGE', color : 'vert'},]
     tab("pratice")
     let current_item;
     let mus;
 
-    
-  //  $('.circle').css({"clip-path":`circle(${rayon}px at 50% ${y}px)`})
-
-
-    // onmousemove = function(e){console.log("mouse location:", e.clientX, e.clientY)}
     startExp();
 
 
@@ -74,6 +79,19 @@ $('document').ready(function(){
         startX = e.screenX;
         startY = e.screenY;
         current_item = dico.shift();
+        if(seq > 0){
+            if(__data["trials"][seq] == undefined){
+                __data["subject"] = "01";
+                __data["group"] = groupe;
+                __data["trials"][seq] = {};
+                __data["length"] = dico.length;
+
+            }
+            __data["trials"][seq][__data["length"] - dico.length] = {};
+
+            __data["trials"][seq][__data["length"] - dico.length]["word"] = current_item.name;
+            __data["trials"][seq][__data["length"] - dico.length]["color"] = current_item.color;
+        }
         if(current_item == undefined){return;}
     
         $('.btn_start').css('visibility', 'hidden');
@@ -91,27 +109,35 @@ $('document').ready(function(){
         $('html').css('cursor', 'auto');
         await slowMove();
     
+
         mus = new Mus();
     
-        // Start recording
         mus.record();
     });
 
     $('.btn_color').click(async function(){
+
         mus.stop();
-        mus.frames[0]= ['s', startX, startY];
-        debug = mus;
-        save.push(mus.getData());
+        if(seq > 0){
+            mus.frames[0]= ['s', startX, startY];
+            __data["trials"][seq][__data["length"] - dico.length]["coordinates"] = mus.getData();
+            save.push(mus.getData());
+
+            __data["trials"][seq][__data["length"] - dico.length]["answer"] = $(this).text();
+        }
+
 
         if($(this).text() != current_item.name){
             await showError();
+            if(seq > 0){
+                __data["trials"][seq][__data["length"] - dico.length]["error"] = true;
+
+            }
         }
         await showBtnStart();
         $(`.btn_start`).attr("disabled",false);
         $('.text,.slowmode').css('visibility', 'hidden');
 
-        console.log(dico.length);
-        console.log(seq);
         if(dico.length == 15 && seq == 0){
             nextStep('card_start','card_start_exp');
         }
@@ -125,7 +151,7 @@ $('document').ready(function(){
 
 
 
-        drawTrajectory(mus.frames)
+        //drawTrajectory(mus.frames)
 
 
 
@@ -371,7 +397,7 @@ console.log(rndInt)
 function startExp(){
     $('.start_exp').on('click', function() {
         nextStep('card_start_exp', 'card_start');
-        seq = seq +1;
+        seq++;
         if(seq == 1){
             nextStep('card_start_exp', 'card_start');
             dico = seq1;
