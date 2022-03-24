@@ -146,7 +146,9 @@ $('document').ready(function(){
         }
         if(dico.length == 18 && seq == 2){
             nextStep('card_start','card_end');
-
+            $(".end_exp").click(function(){
+                savedata();
+            })
         }
 
 
@@ -410,7 +412,7 @@ function startExp(){
 }
 
 
-function savedata(data) {
+function savedata() {
 
     // Creating a XHR object
     let xhr = new XMLHttpRequest();
@@ -423,7 +425,7 @@ function savedata(data) {
     xhr.setRequestHeader("Content-Type", "application/json");
 
     // Sending data with the request
-    xhr.send(JSON.stringify(data));
+    xhr.send(JSON.stringify(__data));
 }
 
 
