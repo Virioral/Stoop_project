@@ -107,7 +107,9 @@ body, .main{
     z-index: 1;
 }
 
-
+.card_start_exp,
+.card_exp_secondpart,
+.card_end,
 .card_presentation,
 .card_formulaire {
     width: 700px;

@@ -1,5 +1,3 @@
-
-
 var saveMove = true;
 var save = [];
 var __data = {
@@ -8,8 +6,6 @@ var __data = {
     "length": 0,
     "blocks":{
     }
-     
-
 };
 
 var data_congruent = [
@@ -30,8 +26,6 @@ var data_congruent = [
         color: 'yellow'
     },
 ]
-
-
 var data_incongruent = [
     {
         name : 'ROUGE',
@@ -52,8 +46,7 @@ var data_incongruent = [
 ]
 
 var dico = [];
-var tab_practice = ["MC","MC","MC","MC","MC","MC","MC","MC","MI","MI","MI","MI","MI","MI","MI","MI"];
-
+var tab_practice = ["MC","MC","MC","MC","MI","MI","MI","MI"];
 var tab_congruent = ["MC","MC","MC","MC","MC","MC","MC","MC","MI","MI"];
 var tab_incongruent = ["MI","MI","MI","MI","MI","MI","MI","MI","MC","MC"];
 
@@ -61,24 +54,13 @@ var seq1 = [];
 var seq2 = [];
 var seq = 0;
 
-var debug;
-
 var groupe = location.search.replace('?groupe=', '');
-
-//var mydata = JSON.parse(data);
-
-
-var data_groupe1 = {}
-
-4,4,1,1
-
 
 $('document').ready(function(){
 
-    tab("pratice")
+    initPractice();
     let current_item;
     let mus;
-
     startExp();
 
 
@@ -92,10 +74,8 @@ $('document').ready(function(){
                 __data["group"] = groupe;
                 __data["blocks"][seq] = {};
                 __data["length"] = dico.length;
-
             }
             __data["blocks"][seq][__data["length"] - dico.length] = {};
-
             __data["blocks"][seq][__data["length"] - dico.length]["word"] = current_item.name;
             __data["blocks"][seq][__data["length"] - dico.length]["color"] = current_item.color;
         }
@@ -108,29 +88,23 @@ $('document').ready(function(){
             setTimeout(resolve,300)
         })
     
-        //x => $(document).width()/2, y => pos milieu btn start
         $(`.btn_start`).attr("disabled",true);
         $('.text').text(current_item.name).css('color', current_item.color).css('visibility', 'unset');
         $('.slowmode').text(!saveMove ? "Veuillez effectuer l'action plus rapidement" : "").css('visibility', !saveMove ? 'unset' : 'hidden');
-
         $('html').css('cursor', 'auto');
         slowMove();
-    
 
         mus = new Mus();
-    
         mus.record();
     });
 
     $('.btn_color').click(async function(){
-
         mus.stop();
         if(seq > 0){
             mus.frames[0]= ['s', startX, startY];
             __data["blocks"][seq][__data["length"] - dico.length]["coordinates"] = mus.getData().frames.filter(elem => elem.shift());
             __data["blocks"][seq][__data["length"] - dico.length]["answer"] = $(this).text();
         }
-
 
         if($(this).val() != current_item.color){
             await showError();
@@ -139,6 +113,7 @@ $('document').ready(function(){
 
             }
         }
+
         await showBtnStart();
         $(`.btn_start`).attr("disabled",false);
         $('.text,.slowmode').css('visibility', 'hidden');
@@ -146,67 +121,33 @@ $('document').ready(function(){
         if(dico.length == 0 && seq == 0){
             nextStep('card_start','card_start_exp');
         }
-        if(dico.length == 0 && seq == 1){
+        else if(dico.length == 0 && seq == 1){
             nextStep('card_start','card_exp_secondpart');
         }
-        if(dico.length == 0 && seq == 2){
+        else if(dico.length == 0 && seq == 2){
             nextStep('card_start','card_end');
             $(".end_exp").click(function(){
                 savedata();
             })
         }
-
-
-
-        //drawTrajectory(mus.frames)
-
-
-
-        // Starts playing and enjoy
-        //mus.play();
     });
 
-
-    tab_pratice = tab_practice.sort(sortRandom);
     beforeStart();
-    
-    displaysequence(groupe);
-
-
+    displaysequence();
 })
 
-function drawTrajectory(data){
-    $('#canvas').show();
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+/**
+ * this fucntion will init the 4 buttons at the same distance from the start buttom 
+ */
+function initPosition(){
+    var offset = $('.btn_start').offset();
+    var height = $('.btn_start').outerHeight();
+    var y = offset.top + height/2;
 
-    ctx.canvas.width  = window.innerWidth;
-    ctx.canvas.height = window.innerHeight;
+    var heightDoc = $(document).height();
+    var widthDoc = $(document).width()
 
-    let offset = $('.btn_start').offset();
-    let height = $('.btn_start').innerHeight();
-    let y = offset.top + height/2;
-
-    ctx.moveTo($(document).width()/2, y);
-    for(let i = 1; i < data.length; i++){
-        ctx.lineTo(data[i][1],data[i][2])
-    }
-    ctx.lineWidth = 5;
-    ctx.stroke();
-
-}
-
-function initPosition(rayon, y){
-
-
-var offset = $('.btn_start').offset();
-var height = $('.btn_start').outerHeight();
-var y = offset.top + height/2;
-
-var heightDoc = $(document).height();
-var widthDoc = $(document).width()
-
-var rayon = widthDoc < heightDoc ? widthDoc/2.5 : heightDoc/2;
+    var rayon = widthDoc < heightDoc ? widthDoc/2.5 : heightDoc/2;
 
     let current_width_document = $(document).width();
     let x1 = current_width_document/2+rayon*1/2-$('.bloc1').innerWidth()/2;
@@ -230,37 +171,10 @@ var rayon = widthDoc < heightDoc ? widthDoc/2.5 : heightDoc/2;
     $('.bloc4').css('position', 'absolute').css('top', y4).css('left', x4);
 }
 
-async function start(dico, mus){
-
-    let val = dico.shift();
-    if(val == undefined){return;}
-
-    $('.btn_start').css('visibility', 'hidden');
-    $('html').css('cursor', 'none');
-
-    await new Promise(function(resolve){
-        setTimeout(resolve,1000)
-    })
-    let offset = $('.btn_start').offset();
-    let height = $('.btn_start').innerHeight();
-    let y = offset.top + height/2;
-
-    //x => $(document).width()/2, y => pos milieu btn start
-    $(`.btn_start`).attr("disabled",true);
-    $('.text').text(val.name).css('color', val.color).css('visibility', 'unset');
-    // let $text_slowmode = $('.slowmode');
-    // $text_slowmode.css('visibility', text_slowmode.text() == "" ? 'hidden' : 'unset');
-    
-
-    $('.btn_start').css('visibility', 'unset');
-    $('html').css('cursor', 'auto');
-
-    mus = new Mus();
-
-    // Start recording
-    mus.record();
-}
-
+/**
+ * This function will display the cross after a wring response
+ * @returns Promise
+ */
 function showError(){
     return new Promise(async function(resolve){
         $('.error').css('visibility','unset');
@@ -272,6 +186,10 @@ function showError(){
     });
 }
 
+/**
+ * This function will display the buttom start after 500ms
+ * @returns promise
+ */
 function showBtnStart(){
     return new Promise(async function(resolve){
         await new Promise(function(resolve){
@@ -282,6 +200,10 @@ function showBtnStart(){
     });
 }
 
+/**
+ * this fucntion will display the msg to be more reactive on the iteration
+ * @returns promise
+ */
 function slowMove(){
     return new Promise(async function(resolve){
         saveMove = false;
@@ -298,42 +220,26 @@ function slowMove(){
     })
 }
 
-
-// function saveFirstMove(){
-
-//         $('html').on('mousemove', function(e){
-            
-//             $('html').off('mousemove');
-//         });
-//         await new Promise(function(resolve){
-//             setTimeout(resolve,500)
-//         });
-        
-        
-//         resolve(saveMove);
-//     })
-// }
-
-function tab(val){
-    if(val == "pratice"){
-        tab_pratice = tab_practice.sort(sortRandom);
-        console.log(tab_practice)
-        for(let i = 0; i<tab_practice.length; i++){
-            let ramdom_number = randomIntFromInterval(0, 3);
-            if (tab_practice[i] == "MI"){
-                dico.push(data_incongruent[ramdom_number])
-            }
-            else{
-                dico.push(data_congruent[ramdom_number])
-            }
-
+/**
+ * This function will generate the pratice part for the experience
+ */
+function initPractice(){
+    tab_pratice = tab_practice.sort(sortRandom);
+    for(let i = 0; i<tab_practice.length; i++){
+        let ramdom_number = randomIntFromInterval(0, 3);
+        if (tab_practice[i] == "MI"){
+            dico.push(data_incongruent[ramdom_number])
         }
-
+        else{
+            dico.push(data_congruent[ramdom_number])
+        }
     }
 }
 
-function displaysequence(groupe){
-    //groupe 1 4,4,1,1  1,1,4,4
+/**
+ * this function will generate the both seq for the experience 
+ */
+function displaysequence(){
     let results = []
     if(groupe == 1){
         index = [0,1,2,3]
@@ -352,75 +258,31 @@ function displaysequence(groupe){
     results.push(data_incongruent[index[1]]);
     results.push(data_congruent[index[2]]);
     results.push(data_congruent[index[3]]);
-  
+
+    results2 = [...results];
+
 
     seq1 = results.sort(sortRandom);
-    seq2 = results.sort(sortRandom);
+    seq2 = results2.sort(sortRandom);
 }
 
-// function displaysequence(groupe){
-//     let results = [];
-//     for(let j = 0; j<4; j++){
-//         let bool = groupe == 1 ? j<2 : j>2;
-//         if(bool){
-//             let tab_sort_congruent = tab_congruent.sort(sortRandom);
-//             for(let i = 0; i<tab_sort_congruent.length; i++){
-//                 if (tab_sort_congruent[i] == "MI"){
-//                     results.push(data_incongruent[j])
-//                 }
-//                 else{
-//                     results.push(data_congruent[j])
-//                 }
-        
-//             }
-//         }
-//         else{
-//             let tab_sort_incongruent = tab_incongruent.sort(sortRandom);
-//             for(let i = 0; i<tab_sort_incongruent.length; i++){
-//                 if (tab_sort_incongruent[i] == "MI"){
-//                     results.push(data_incongruent[j])
-//                 }
-//                 else{
-//                     results.push(data_congruent[j])
-//                 }
-        
-//             }
-//         }
-
-//         random_results = results.sort(sortRandom);
-//         seq1 = random_results.slice(0,20);
-//         seq2 = random_results.slice(20,40);
-        
-//     }
-   
-
-
-// }
-
+/**
+ * This fucntion will return a random number in between min and max 
+ * @param {int} min 
+ * @param {int} max 
+ * @returns 
+ */
 function randomIntFromInterval(min, max) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-
-
-
-
-
-
-
-
-
 /**
  * This function will sort a list randomly
- * 
  * @returns integer
  */
  function sortRandom() {
     return 0.5 - Math.random();
 }
-
-const rndInt = randomIntFromInterval(1, 6)
-console.log(rndInt)
 
 /**
  * This function will hide the old step and show the next one
@@ -443,6 +305,9 @@ console.log(rndInt)
     });
 }
 
+/**
+ * this function will display the different seq of our experience
+ */
 function startExp(){
     $('.start_exp').on('click', function() {
         nextStep('card_start_exp', 'card_start');
@@ -458,9 +323,10 @@ function startExp(){
     });
 }
 
-
+/**
+ * this function will call an other file to save the data
+ */
 function savedata() {
-
     // Creating a XHR object
     let xhr = new XMLHttpRequest();
     let url = "/m1-miashs-2022-s2/ahc8Ohte/savedata.php";
@@ -474,47 +340,3 @@ function savedata() {
     // Sending data with the request
     xhr.send(JSON.stringify(__data));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // displaysequence(1)
-    // displaysequence(2)
-    // $("form").validate({
-    //     rules: {
-    //         tranche_age: { required: true },
-    //         frequence_utilisation: { required: true },
-    //         rgpd: { required: true }
-    //     },
-    //     messages: {
-    //         tranche_age: { required: "Veuillez sélectionner votre tranche d'âge." },
-    //         frequence_utilisation: { required: "Veuillez sélectionner votre fréquence d'utilisation." },
-    //         rgpd: { required: "Veuillez accepter le règlement général de protection des données." },
-    //     },
-    //     errorPlacement: function(label, element) {
-    //         if (element[0].type == "checkbox") {
-    //             label.addClass('errorMsq');
-    //             label.insertAfter(element.parent());
-    //         } else {
-    //             label.insertAfter(element);
-    //         }
-    //     },
-    //     submitHandler: function(form) {
-    //         const formData = new FormData(form);
-    //         formData.forEach((value, key) => __data[key] = value);
-    //         nextStep('card_formulaire', 'card_presentation');
-    //         beforeStart();
-    //     }
-    // });
