@@ -143,13 +143,13 @@ $('document').ready(function(){
         $(`.btn_start`).attr("disabled",false);
         $('.text,.slowmode').css('visibility', 'hidden');
 
-        if(dico.length == 15 && seq == 0){
+        if(dico.length == 0 && seq == 0){
             nextStep('card_start','card_start_exp');
         }
-        if(dico.length == 18 && seq == 1){
+        if(dico.length == 0 && seq == 1){
             nextStep('card_start','card_exp_secondpart');
         }
-        if(dico.length == 18 && seq == 2){
+        if(dico.length == 0 && seq == 2){
             nextStep('card_start','card_end');
             $(".end_exp").click(function(){
                 savedata();
@@ -348,17 +348,14 @@ function displaysequence(groupe){
         results.push(data_incongruent[index[3]]);
     }
 
-        results.push(data_incongruent[index[0]]);
-        results.push(data_incongruent[index[1]]);
-        results.push(data_congruent[index[2]]);
-        results.push(data_congruent[index[3]]);
+    results.push(data_incongruent[index[0]]);
+    results.push(data_incongruent[index[1]]);
+    results.push(data_congruent[index[2]]);
+    results.push(data_congruent[index[3]]);
   
 
-    console.log(results)
-
-    random_results = results.sort(sortRandom);
-    seq1 = random_results.slice(0,20);
-    seq2 = random_results.slice(20,40);
+    seq1 = results.sort(sortRandom);
+    seq2 = results.sort(sortRandom);
 }
 
 // function displaysequence(groupe){
