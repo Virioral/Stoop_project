@@ -68,6 +68,10 @@ var groupe = location.search.replace('?groupe=', '');
 //var mydata = JSON.parse(data);
 
 
+var data_groupe1 = {}
+
+4,4,1,1
+
 
 $('document').ready(function(){
 
@@ -128,7 +132,7 @@ $('document').ready(function(){
         }
 
 
-        if($(this).text() != current_item.name){
+        if($(this).val() != current_item.color){
             await showError();
             if(seq > 0){
                 __data["blocks"][seq][__data["length"] - dico.length]["error"] = true;
@@ -163,7 +167,7 @@ $('document').ready(function(){
 
     tab_pratice = tab_practice.sort(sortRandom);
     beforeStart();
-
+    
     displaysequence(groupe);
 
 
@@ -327,43 +331,72 @@ function tab(val){
 }
 
 function displaysequence(groupe){
-    let results = [];
-    for(let j = 0; j<4; j++){
-        let bool = groupe == 1 ? j<2 : j>2;
-        if(bool){
-            let tab_sort_congruent = tab_congruent.sort(sortRandom);
-            for(let i = 0; i<tab_sort_congruent.length; i++){
-                if (tab_sort_congruent[i] == "MI"){
-                    results.push(data_incongruent[j])
-                }
-                else{
-                    results.push(data_congruent[j])
-                }
-        
-            }
-        }
-        else{
-            let tab_sort_incongruent = tab_incongruent.sort(sortRandom);
-            for(let i = 0; i<tab_sort_incongruent.length; i++){
-                if (tab_sort_incongruent[i] == "MI"){
-                    results.push(data_incongruent[j])
-                }
-                else{
-                    results.push(data_congruent[j])
-                }
-        
-            }
-        }
-
-        random_results = results.sort(sortRandom);
-        seq1 = random_results.slice(0,20);
-        seq2 = random_results.slice(20,40);
-        
+    //groupe 1 4,4,1,1  1,1,4,4
+    let results = []
+    if(groupe == 1){
+        index = [0,1,2,3]
     }
+    else{
+        index = [2,3,0,1]
+    }
+    for(let i = 0; i<4; i++){
+        results.push(data_congruent[index[0]]);
+        results.push(data_congruent[index[1]]);
+        results.push(data_incongruent[index[2]]);
+        results.push(data_incongruent[index[3]]);
+    }
+
+        results.push(data_incongruent[index[0]]);
+        results.push(data_incongruent[index[1]]);
+        results.push(data_congruent[index[2]]);
+        results.push(data_congruent[index[3]]);
+  
+
+    console.log(results)
+
+    random_results = results.sort(sortRandom);
+    seq1 = random_results.slice(0,20);
+    seq2 = random_results.slice(20,40);
+}
+
+// function displaysequence(groupe){
+//     let results = [];
+//     for(let j = 0; j<4; j++){
+//         let bool = groupe == 1 ? j<2 : j>2;
+//         if(bool){
+//             let tab_sort_congruent = tab_congruent.sort(sortRandom);
+//             for(let i = 0; i<tab_sort_congruent.length; i++){
+//                 if (tab_sort_congruent[i] == "MI"){
+//                     results.push(data_incongruent[j])
+//                 }
+//                 else{
+//                     results.push(data_congruent[j])
+//                 }
+        
+//             }
+//         }
+//         else{
+//             let tab_sort_incongruent = tab_incongruent.sort(sortRandom);
+//             for(let i = 0; i<tab_sort_incongruent.length; i++){
+//                 if (tab_sort_incongruent[i] == "MI"){
+//                     results.push(data_incongruent[j])
+//                 }
+//                 else{
+//                     results.push(data_congruent[j])
+//                 }
+        
+//             }
+//         }
+
+//         random_results = results.sort(sortRandom);
+//         seq1 = random_results.slice(0,20);
+//         seq2 = random_results.slice(20,40);
+        
+//     }
    
 
 
-}
+// }
 
 function randomIntFromInterval(min, max) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)
