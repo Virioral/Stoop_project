@@ -5,22 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 
-    <script
-        src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-        crossorigin="anonymous"></script>
-    <script src="main.js"></script>
+
+
+    <script src="./lib/jquery/jquery.js"></script>
+    <link href="./lib/bootstrap/bootstrap.css" rel="stylesheet">
+    <script src="./lib/bootstrap/bootstrap.js"></script>
+    <link rel="stylesheet" href="./lib/fontAwesome/fontAwesome.css">
+    <script src="./lib/fontAwesome/fontAwesome.js"></script>
+
+    <script src="./lib/jquery/jquery-validate.js"></script>
+
     <script src="./lib/mus.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <script src="main.js"></script>
+
+
+
 
 </head>
 <body>
     
     <section class='main d-flex align-items-center'>
-        <div class='card card_formulaire p-5 d-none'>
+
+        <div class='card card_formulaire p-5'>
             <form>
                 <div class='d-flex my-2'>
                     <div class="form-check">
@@ -62,7 +70,8 @@
             </form>
         </div>
     
-        <div class='card card_presentation '>
+    
+        <div class='card card_presentation d-none'>
             <div class="card-body">
                 <h5 class="card-title justify">
                     Bonjour, <br> Vous êtes sur le point de participer à une expérience réaliser dans le cadre de notre Master MIASHS.
@@ -134,8 +143,76 @@
             <!-- <div class='test'></div> -->
     
         </div>
-        <div class='error d-flex align-items-center justify-content-center'>❌</div>
+        <div class='error_color d-flex align-items-center justify-content-center'>❌</div>
         <!-- <div class='circle'></div> -->
     </section>    
+
+      <!-- Modal -->
+  <div class="modal fade" id="modalCGU" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalCGULabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCGULabel">Règlement Général de Protection des Données</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p>
+                Les informations recueillies vous concernant vont faire l’objet d’un traitement dans le cadre du projet
+                de méthodes comportementales piloté par « Legras Kévin et Bastet Tommy, étudiants en master 2 informatique et cognition, contacts : legraskevin@outlook.com, tommybastet@hotmail.fr»
+            </p>
+            <p>
+                Le traitement de données concerne : la rapidité de navigation dans différents types et styles de menus.
+                Nous attendons de vous que vous participiez à notre recherche via notre jeu en ligne. Celui-ci sera composé de 6 étapes dont le temps est indéterminé, cela dépendra de votre rapidité (néanmoins le temps de l'expérience ne devrai pas dépasser quelques minutes).
+            </p>
+            <p>
+                Seules les données strictement nécessaires à la réalisation de notre recherche seront collectées et traitées : 
+                <ul>
+                    <li>Données d'identifications indirectes (genre, tranche d'âge)</li>
+                    <li>Donnée vie personnelle (fréquence d'utilisation)</li>
+                    <li>Données de temps (temps d'actions de chaques étapes)</li>
+                    <li>Donnée utilitaire (taille de l'écran)</li>
+                </ul>
+            </p>
+            <p>
+                Votre participation au projet de méthodes comportementales est entièrement libre et volontaire. 
+            </p>
+            <p>
+                Vous êtes libre de vous retirer ou de cesser votre participation à ce projet à tout moment. Ce retrait n’aura aucune
+                conséquence.
+                Le retrait du consentement sera effectif à partir de la date où il a été reçu par le responsable de traitement.
+            </p>
+            <p>
+                Les données recueillies seront transférées / conservées par un des partenaires du projet dans un pays de
+                l’Union Européenne, ce pays est soumis aux mêmes règles de protection de la vie privée que la France.
+            </p>
+            <p>
+                Vos données personnelles sont conservées en base active jusqu’au 05/09/2022.
+                Après cette date, elles seront définitivement détruites.
+            </p>
+            <p>
+                Afin de garantir la confidentialité de vos données et éviter leur divulgation, les dispositifs suivants ont été mis en place :
+                <ul>
+                    <li>Seuls les services de l'universitée Grenoble Alpes sont autorisés à accéder aux données</li>
+                </ul>
+            </p>
+            <p>
+                Les résultats de cette recherche seront diffusés de façon anonyme dans des colloques professionnels et scientifiques, dans
+                des rapports destinés aux servives de l'universitée Grenoble Alpes.
+            </p>
+            <p>
+                Vous pouvez poser des questions au sujet de ce projet à tout moment en communiquant avec le responsable du projet par
+                courrier électronique: « legraskevin@outlook.com, tommybastet@hotmail.fr »
+                Vous pouvez vous opposer au traitement de ces données et les faire effacer. Vous disposez également d’un droit à la limitation du traitement de vos données. Vous pouvez
+                exercer ces droits en vous adressant à : « legraskevin@outlook.com, tommybastet@hotmail.fr ».
+            </p>
+            <p>
+                Après nous avoir contactés, si vous estimez que vos droits Informatique et Libertés ne sont pas respectés, vous avez la
+                possibilité d’introduire une réclamation en ligne auprès de la CNIL ou par courrier postal. CNIL, 3 Place de Fontenoy, TSA
+                80715 – 75334 Paris Cedex 07 ( https://www.cnil.fr/)
+            </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

@@ -58,6 +58,30 @@ var groupe = location.search.replace('?groupe=', '');
 
 $('document').ready(function(){
 
+
+    $("form").validate({
+        rules: {
+            tranche_age: { required: true },
+            rgpd: { required: true }
+        },
+        messages: {
+            tranche_age: { required: "Veuillez sélectionner votre tranche d'âge." },
+            rgpd: { required: "Veuillez accepter le règlement général de protection des données." },
+        },
+        errorPlacement: function(label, element) {
+            if (element[0].type == "checkbox") {
+                label.addClass('errorMsq');
+                label.insertAfter(element.parent());
+            } else {
+                label.insertAfter(element);
+            }
+        },
+        submitHandler: function(form) {
+            const formData = new FormData(form);
+            formData.forEach((value, key) => __data[key] = value);
+            nextStep('card_formulaire', 'card_presentation');
+        }
+    });
     initPractice();
     let current_item;
     let mus;
