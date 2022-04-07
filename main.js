@@ -201,11 +201,11 @@ function initPosition(){
  */
 function showError(){
     return new Promise(async function(resolve){
-        $('.error').css('visibility','unset');
+        $('.error_color').css('visibility','unset');
         await new Promise(function(resolve){
             setTimeout(resolve,2000)
         });
-        $('.error').css('visibility','hidden');
+        $('.error_color').css('visibility','hidden');
         resolve();
     });
 }
