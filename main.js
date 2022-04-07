@@ -55,6 +55,7 @@ var seq2 = [];
 var seq = 0;
 
 var groupe = location.search.replace('?groupe=', '');
+groupe = groupe == "" ? '2' : groupe;
 
 $('document').ready(function(){
 
@@ -129,7 +130,7 @@ $('document').ready(function(){
             __data["blocks"][seq][__data["length"] - dico.length]["coordinates"] = mus.getData().frames.filter(elem => elem.shift());
             __data["blocks"][seq][__data["length"] - dico.length]["answer"] = $(this).text();
         }
-
+        __data["blocks"][seq][__data["length"] - dico.length]["error"] = false;
         if($(this).val() != current_item.color){
             await showError();
             if(seq > 0){
