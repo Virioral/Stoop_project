@@ -129,8 +129,8 @@ $('document').ready(function(){
             mus.frames[0]= ['s', startX, startY];
             __data["blocks"][seq][__data["length"] - dico.length]["coordinates"] = mus.getData().frames.filter(elem => elem.shift());
             __data["blocks"][seq][__data["length"] - dico.length]["answer"] = $(this).text();
+            __data["blocks"][seq][__data["length"] - dico.length]["error"] = false;
         }
-        __data["blocks"][seq][__data["length"] - dico.length]["error"] = false;
         if($(this).val() != current_item.color){
             await showError();
             if(seq > 0){
