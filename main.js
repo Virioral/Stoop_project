@@ -157,9 +157,7 @@ $('document').ready(function(){
         }
         else if(dico.length == 0 && seq == 2){
             nextStep('card_start','card_end');
-            $(".end_exp").click(function(){
-                savedata();
-            })
+            savedata();
         }
     });
 
