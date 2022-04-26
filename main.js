@@ -57,6 +57,10 @@ var seq = 0;
 var groupe = location.search.replace('?groupe=', '');
 groupe = groupe == "" ? '2' : groupe;
 
+
+var timerStartMove;
+var timerInterval;
+
 $('document').ready(function(){
 
 
@@ -118,6 +122,7 @@ $('document').ready(function(){
         $('.slowmode').text(!saveMove ? "Veuillez effectuer l'action plus rapidement" : "").css('visibility', !saveMove ? 'unset' : 'hidden');
         $('html').css('cursor', 'auto');
         slowMove();
+        timerSaveInitMove();
 
         mus = new Mus();
         mus.record();
@@ -127,7 +132,8 @@ $('document').ready(function(){
         mus.stop();
         if(seq > 0){
             mus.frames[0]= ['s', startX, startY];
-            __data["blocks"][seq][__data["length"] - dico.length]["coordinates"] = mus.getData().frames.filter(elem => elem.shift());
+            mus.getData().frames = mus.getData().frames.filter(elem => elem.shift());
+            __data["blocks"][seq][__data["length"] - dico.length]["coordinates"] = mus.getData();
             __data["blocks"][seq][__data["length"] - dico.length]["answer"] = $(this).text();
             __data["blocks"][seq][__data["length"] - dico.length]["error"] = false;
         }
@@ -229,20 +235,39 @@ function showBtnStart(){
  * this fucntion will display the msg to be more reactive on the iteration
  * @returns promise
  */
-function slowMove(){
-    return new Promise(async function(resolve){
+async function slowMove(){
+    await new Promise(async function(resolve){
         saveMove = false;
 
-        $('html').on('mousemove', function(e){
+        $('html').on('mousemove.move', function(e){
             saveMove = true;
         });
         await new Promise(function(resolve){
-            setTimeout(resolve,500)
+            setTimeout(resolve(),500)
         });
         
-        $('html').off('mousemove');
+        $('html').off("mousemove.move");
+
         resolve(saveMove);
     })
+
+}
+
+function timerSaveInitMove(){
+
+    timerStartMove = 0;
+
+    timerInterval = setInterval(function(){ timerStartMove++ }, 1);    
+
+    $('html').on('mousemove.startmove', function(e){
+        clearInterval(timerInterval);
+        if(seq > 0){
+            __data["blocks"][seq][__data["length"] - dico.length]["timerStartMove"] = timerStartMove;
+        }
+
+        $('html').off('mousemove.startmove');
+    });
+    
 }
 
 /**
