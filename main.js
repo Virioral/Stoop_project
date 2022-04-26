@@ -235,8 +235,8 @@ function showBtnStart(){
  * this fucntion will display the msg to be more reactive on the iteration
  * @returns promise
  */
-async function slowMove(){
-    await new Promise(async function(resolve){
+function slowMove(){
+    new Promise(async function(resolve){
         saveMove = false;
 
         $('html').on('mousemove.move', function(e){
