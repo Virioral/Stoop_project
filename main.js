@@ -236,17 +236,17 @@ function showBtnStart(){
  * @returns promise
  */
 function slowMove(){
-    new Promise(async function(resolve){
+    return new Promise(async function(resolve){
         saveMove = false;
 
         $('html').on('mousemove.move', function(e){
             saveMove = true;
         });
         await new Promise(function(resolve){
-            setTimeout(resolve(),500)
+            setTimeout(resolve,500)
         });
         
-        $('html').off("mousemove.move");
+        $('html').off('mousemove.move');
 
         resolve(saveMove);
     })
